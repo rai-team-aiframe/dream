@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio - DreamMaker</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/studio.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="studio-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-paint-brush"></i>
+                    <h1>DreamMaker</h1>
+                </div>
+                <button class="toggle-sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#">
+                            <i class="fas fa-palette"></i>
+                            <span>Studio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#gallery">
+                            <i class="fas fa-images"></i>
+                            <span>My Gallery</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-outline btn-block">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="studio-header">
+                <h1>Welcome to your Studio, <span>{{ user.username }}</span></h1>
+                <div class="user-menu">
+                    <button class="user-button">
+                        <div class="user-avatar">{{ user.username[0].upper() }}</div>
+                        <span class="user-name">{{ user.username }}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <button id="mobile-logout" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <section class="generator-section">
+                <div class="generator-card">
+                    <div class="card-header">
+                        <h2>Image Generator</h2>
+                        <p>Describe what you'd like to create and our AI will bring it to life</p>
+                    </div>
+                    
+                    <form id="image-generator-form">
+                        <div class="form-group">
+                            <label for="prompt">Your Description</label>
+                            <textarea id="prompt" name="prompt" placeholder="Describe the image you want to create..." required></textarea>
+                        </div>
+                        
+                        <div class="settings-row">
+                            <div class="form-group">
+                                <label for="width">Width</label>
+                                <div class="slider-container">
+                                    <input type="range" id="width" name="width" min="256" max="1440" step="64" value="1024">
+                                    <div class="slider-value"><span id="width-value">1024</span> px</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="height">Height</label>
+                                <div class="slider-container">
+                                    <input type="range" id="height" name="height" min="256" max="1440" step="64" value="1024">
+                                    <div class="slider-value"><span id="height-value">1024</span> px</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <span class="btn-text"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</span>
+                                <span class="btn-loader">
+                                    <i class="fas fa-spinner fa-spin"></i> Generating...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="result-card" class="result-card" style="display: none;">
+                    <div class="card-header">
+                        <h2>Generated Image</h2>
+                        <div class="result-actions">
+                            <button id="download-btn" class="btn btn-outline btn-sm">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button id="new-image-btn" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Create New
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="result-content">
+                        <div class="result-image-container">
+                            <img id="result-image" src="" alt="Generated image">
+                            <div class="image-loader">
+                                <div class="spinner"></div>
+                                <p>Creating your masterpiece...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="result-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Prompt:</span>
+                                <p id="result-prompt" class="detail-value"></p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Dimensions:</span>
+                                <p id="result-dimensions" class="detail-value"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="gallery" class="gallery-section">
+                <div class="section-header">
+                    <h2>My Gallery</h2>
+                    <p>All your previously generated images</p>
+                </div>
+                
+                <div id="gallery-grid" class="gallery-grid">
+                    {% if images %}
+                        {% for image in images %}
+                            <div class="gallery-item" data-id="{{ image.id }}">
+                                <div class="gallery-image">
+                                    <img src="/{{ image.file_path }}" alt="{{ image.prompt }}">
+                                    <div class="image-overlay">
+                                        <button class="btn btn-icon download-gallery-image" data-id="{{ image.id }}">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="gallery-details">
+                                    <p class="gallery-prompt">{{ image.prompt }}</p>
+                                    <p class="gallery-date">{{ image.created_at }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-gallery">
+                            <i class="fas fa-image"></i>
+                            <p>You haven't created any images yet</p>
+                            <p>Start by using the image generator above</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Notifications -->
+    <div class="notification-container" id="notification-container"></div>
+    
+    <script src="/static/js/studio.js"></script>
+</body>
+</html>

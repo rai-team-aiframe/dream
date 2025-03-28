@@ -1,0 +1,230 @@
+/* 
+ * DREAMMAKER - AUTH PAGE STYLES
+ * Styles for login and signup pages
+ */
+
+ .auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-darker);
+    padding: var(--space-4);
+}
+
+.auth-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    animation: slideUp 0.5s ease;
+}
+
+.auth-card {
+    width: 50%;
+    background-color: var(--bg-card);
+    padding: var(--space-7);
+    position: relative;
+    z-index: 1;
+}
+
+.auth-image {
+    width: 50%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Login page image */
+.login-image {
+    background-image: url('/static/images/cosmic-purple.png');
+}
+
+/* Signup page image */
+.signup-image {
+    background-image: url('/static/images/cosmic-hand.png');
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.5), rgba(139, 92, 246, 0.3));
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.auth-header .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.auth-header .logo i {
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.auth-header .logo h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0;
+    background: linear-gradient(45deg, var(--primary), #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.auth-header h2 {
+    font-size: 1.8rem;
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+}
+
+.auth-header p {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.auth-form {
+    margin-top: var(--space-6);
+}
+
+.input-icon .toggle-password {
+    cursor: pointer;
+    color: var(--text-tertiary);
+    transition: color var(--transition-fast);
+}
+
+.input-icon .toggle-password:hover {
+    color: var(--text-primary);
+}
+
+.auth-links {
+    margin-top: var(--space-5);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.auth-links a {
+    color: var(--primary);
+    font-weight: 500;
+    transition: color var(--transition-fast);
+}
+
+.auth-links a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* Password strength indicator */
+.password-strength {
+    margin-top: var(--space-3);
+}
+
+.strength-bar {
+    height: 4px;
+    background-color: var(--bg-input);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
+}
+
+.bar-level {
+    height: 100%;
+    width: 0;
+    background-color: var(--error);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.bar-level.weak {
+    width: 25%;
+    background-color: var(--error);
+}
+
+.bar-level.medium {
+    width: 50%;
+    background-color: var(--warning);
+}
+
+.bar-level.strong {
+    width: 75%;
+    background-color: #3b82f6;
+}
+
+.bar-level.very-strong {
+    width: 100%;
+    background-color: var(--success);
+}
+
+#strength-text {
+    font-size: 0.85rem;
+    color: var(--text-tertiary);
+}
+
+/* Animation for form submission */
+@keyframes pulse-border {
+    0% {
+        box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 0 10px rgba(124, 58, 237, 0);
+    }
+}
+
+.auth-form .btn-primary.loading {
+    animation: pulse-border 1.5s infinite;
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+    .auth-card {
+        width: 65%;
+    }
+    
+    .auth-image {
+        width: 35%;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-wrapper {
+        flex-direction: column;
+        height: auto;
+        box-shadow: none;
+    }
+    
+    .auth-card, .auth-image {
+        width: 100%;
+    }
+    
+    .auth-card {
+        padding: var(--space-5);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+    }
+    
+    .auth-image {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: var(--space-4);
+    }
+    
+    .auth-header .logo {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamMaker - Create Stunning AI Images</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/welcome.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="welcome-container">
+        <header class="welcome-header">
+            <div class="logo">
+                <i class="fas fa-paint-brush"></i>
+                <h1>DreamMaker</h1>
+            </div>
+            <nav>
+                <a href="/login" class="btn btn-outline">Login</a>
+                <a href="/signup" class="btn btn-primary">Sign Up</a>
+            </nav>
+        </header>
+
+        <main class="welcome-content">
+            <div class="hero">
+                <div class="hero-text">
+                    <h1>Transform Your Ideas into Visual Art</h1>
+                    <p>DreamMaker uses advanced AI to turn your text descriptions into stunning images. Create art, visualize concepts, and bring your imagination to life.</p>
+                    <div class="cta-buttons">
+                        <a href="/signup" class="btn btn-primary btn-large">Get Started <i class="fas fa-arrow-right"></i></a>
+                        <a href="#features" class="btn btn-outline btn-large">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="image-container">
+                        <div class="floating-image img1"></div>
+                        <div class="floating-image img2"></div>
+                        <div class="floating-image img3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="features" class="features">
+                <h2>Key Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>AI-Powered Generation</h3>
+                        <p>Create high-quality images from simple text descriptions using cutting-edge AI technology</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <h3>Multilingual Support</h3>
+                        <p>Write prompts in any language - our system will automatically translate for optimal results</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sliders-h"></i>
+                        </div>
+                        <h3>Customizable Dimensions</h3>
+                        <p>Adjust image size and parameters to create exactly what you need</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <h3>Easy Downloads</h3>
+                        <p>Download your creations instantly in high-resolution format</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="how-it-works">
+                <h2>How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Create an Account</h3>
+                        <p>Sign up for a free DreamMaker account to get started</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Describe Your Image</h3>
+                        <p>Enter a detailed description of what you want to create</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Generate &amp; Download</h3>
+                        <p>Our AI will create your image in seconds - ready to download</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="welcome-footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-paint-brush"></i>
+                    <h2>DreamMaker</h2>
+                </div>
+                <p>&copy; 2025 DreamMaker. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Animation for scroll effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                    }
+                });
+            });
+
+            const hiddenElements = document.querySelectorAll('.feature-card, .step');
+            hiddenElements.forEach((el) => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
