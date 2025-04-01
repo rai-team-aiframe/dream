@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - DreamMaker</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .code-input {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: var(--space-4);
+        }
+        
+        .code-input input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+        }
+
+        .resend-link {
+            text-align: center;
+            margin-top: var(--space-4);
+            color: var(--text-secondary);
+        }
+        
+        .resend-link a {
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .resend-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .code-info {
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: var(--space-5);
+            font-size: 0.9rem;
+        }
+        
+        .code-info strong {
+            color: var(--text-primary);
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-wrapper">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <a href="/" class="logo">
+                        <i class="fas fa-paint-brush"></i>
+                        <h1>DreamMaker</h1>
+                    </a>
+                    <h2>Verify Your Email</h2>
+                    <p>We've sent a verification code to your email</p>
+                </div>
+                
+                <div class="auth-form">
+                    <div class="alert error-alert" id="error-message" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="error-text"></span>
+                    </div>
+                    
+                    <div class="code-info">
+                        Please enter the 6-digit code sent to <strong id="user-email">{{ email }}</strong>
+                    </div>
+                    
+                    <form id="verification-form">
+                        <input type="hidden" id="email" name="email" value="{{ email }}">
+                        
+                        <div class="form-group">
+                            <label for="verification-code">Verification Code</label>
+                            <input type="text" id="verification-code" name="verification-code" placeholder="Enter 6-digit code" maxlength="6" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <span class="btn-text">Verify Account</span>
+                            <span class="btn-loader">
+                                <i class="fas fa-spinner fa-spin"></i> Verifying...
+                            </span>
+                        </button>
+                    </form>
+                    
+                    <div class="resend-link">
+                        <p>Didn't receive the code? <a id="resend-btn">Resend Code</a></p>
+                    </div>
+                    
+                    <div class="auth-links">
+                        <p>Already have an account? <a href="/login">Sign In</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auth-image signup-image">
+                <div class="image-overlay"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const verificationForm = document.getElementById('verification-form');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            const resendBtn = document.getElementById('resend-btn');
+            const email = document.getElementById('email').value;
+            
+            // Handle form submission
+            verificationForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const code = document.getElementById('verification-code').value;
+                
+                if (!code || code.length !== 6) {
+                    showError('Please enter a valid 6-digit code');
+                    return;
+                }
+                
+                // Set loading state
+                const submitButton = this.querySelector('button[type="submit"]');
+                setButtonLoading(submitButton, true);
+                
+                try {
+                    const formData = new FormData();
+                    formData.append('email', email);
+                    formData.append('code', code);
+                    
+                    const response = await fetch('/api/verify-account', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.detail || 'Failed to verify account');
+                    }
+                    
+                    // Redirect to studio page
+                    window.location.href = '/studio';
+                    
+                } catch (error) {
+                    showError(error.message);
+                    setButtonLoading(submitButton, false);
+                }
+            });
+            
+            // Handle resend button
+            resendBtn.addEventListener('click', async function() {
+                try {
+                    // Retrieve stored user details
+                    const userData = JSON.parse(localStorage.getItem('pendingUser'));
+                    
+                    if (!userData) {
+                        showError('Unable to resend verification code. Please try signing up again.');
+                        return;
+                    }
+                    
+                    const response = await fetch('/api/send-verification', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(userData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.detail || 'Failed to resend verification code');
+                    }
+                    
+                    showSuccess('Verification code resent. Please check your email.');
+                    
+                } catch (error) {
+                    showError(error.message);
+                }
+            });
+            
+            // Helper functions
+            function showError(message) {
+                errorText.textContent = message;
+                errorMessage.classList.remove('success-alert');
+                errorMessage.classList.add('error-alert');
+                errorMessage.style.display = 'flex';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            function showSuccess(message) {
+                errorText.textContent = message;
+                errorMessage.classList.remove('error-alert');
+                errorMessage.classList.add('success-alert');
+                errorMessage.style.display = 'flex';
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            function setButtonLoading(button, isLoading) {
+                if (isLoading) {
+                    button.classList.add('loading');
+                    button.disabled = true;
+                } else {
+                    button.classList.remove('loading');
+                    button.disabled = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
