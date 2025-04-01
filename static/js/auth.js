@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const barLevel = document.getElementById('bar-level');
         const strengthText = document.getElementById('strength-text');
         const confirmPassword = document.getElementById('confirm-password');
+        const emailInput = document.getElementById('email');
         
         passwordInput.addEventListener('input', function() {
             const password = this.value;
@@ -48,6 +49,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
+        // Check email domain
+        emailInput.addEventListener('blur', function() {
+            const email = this.value.toLowerCase();
+            
+            if (email && !isValidEmailDomain(email)) {
+                this.setCustomValidity("Only Gmail and Outlook email addresses are allowed");
+                showError("Only Gmail and Outlook email addresses are allowed");
+            } else {
+                this.setCustomValidity('');
+                hideError();
+            }
+        });
+        
         // Handle signup form submission
         signupForm.addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -56,6 +70,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = passwordInput.value;
+            
+            if (!isValidEmailDomain(email)) {
+                showError("Only Gmail and Outlook email addresses are allowed");
+                return;
+            }
             
             if (password !== confirmPassword.value) {
                 showError('Passwords do not match');
@@ -85,8 +104,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     throw new Error(data.detail || 'Failed to create account');
                 }
                 
-                // Redirect to login page
-                window.location.href = '/login?signup=success';
+                console.log('Signup successful, redirecting to verification page');
+                
+                // Redirect to verification page
+                window.location.href = `/verify-email?email=${encodeURIComponent(email)}`;
                 
             } catch (error) {
                 showError(error.message);
@@ -118,9 +139,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: formData
                 });
                 
+                // Get email from headers if available (for verification redirect)
+                const email = response.headers.get('email');
+                
                 const data = await response.json();
                 
                 if (!response.ok) {
+                    // Check if this is a verification issue
+                    if (response.status === 403 && data.detail && data.detail.includes('Email not verified')) {
+                        // If we have the email, redirect to verification page
+                        if (email) {
+                            console.log('Email not verified, redirecting to verification page');
+                            window.location.href = `/verify-email?email=${email}`;
+                            return;
+                        }
+                        
+                        // Otherwise, show error and ask to check email
+                        throw new Error('Email not verified. Please check your email for verification instructions.');
+                    }
+                    
                     throw new Error(data.detail || 'Failed to login');
                 }
                 
@@ -133,10 +170,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Check for success message from signup
+        // Check for success message from signup or verification
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('signup') === 'success') {
             showSuccess('Account created successfully! You can now log in.');
+        } else if (urlParams.get('verified') === 'true') {
+            showSuccess('Email verified successfully! You can now log in.');
         }
     }
     
@@ -149,6 +188,10 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             errorMessage.style.display = 'none';
         }, 5000);
+    }
+    
+    function hideError() {
+        errorMessage.style.display = 'none';
     }
     
     function showSuccess(message) {
@@ -218,5 +261,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         return strength;
+    }
+    
+    function isValidEmailDomain(email) {
+        return email.endsWith('@gmail.com') || 
+               email.endsWith('@outlook.com') || 
+               email.endsWith('@hotmail.com');
     }
 });

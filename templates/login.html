@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="/static/css/auth.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .alert.success-alert {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+    </style>
 </head>
 <body>
     <div class="auth-container">
@@ -26,6 +33,11 @@
                     <div class="alert error-alert" id="error-message" style="display: none;">
                         <i class="fas fa-exclamation-circle"></i>
                         <span id="error-text"></span>
+                    </div>
+                    
+                    <div class="alert success-alert" id="success-message" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="success-text"></span>
                     </div>
                     
                     <form id="login-form">
@@ -49,7 +61,7 @@
                         <button type="submit" class="btn btn-primary btn-block">
                             <span class="btn-text">Sign In</span>
                             <span class="btn-loader">
-                                <i class="fas fa-spinner fa-spin"></i>
+                                <i class="fas fa-spinner fa-spin"></i> Signing In...
                             </span>
                         </button>
                     </form>
@@ -65,6 +77,28 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        // Check URL parameters for verification success
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('verified') === 'true') {
+                const successMessage = document.getElementById('success-message');
+                const successText = document.getElementById('success-text');
+                
+                successText.textContent = 'Email verified successfully! You can now log in.';
+                successMessage.style.display = 'flex';
+                
+                // Update the URL without refreshing to remove the parameter
+                const url = new URL(window.location);
+                url.searchParams.delete('verified');
+                window.history.replaceState({}, '', url);
+                
+                // Focus on the username field
+                document.getElementById('username').focus();
+            }
+        });
+    </script>
     
     <script src="/static/js/auth.js"></script>
 </body>
