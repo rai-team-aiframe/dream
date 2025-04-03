@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - DreamMaker</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/studio.css">
+    <link rel="stylesheet" href="/static/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="studio-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-paint-brush"></i>
+                    <h1>DreamMaker</h1>
+                </div>
+                <button class="toggle-sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/studio">
+                            <i class="fas fa-palette"></i>
+                            <span>Studio</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/profile">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/plans">
+                            <i class="fas fa-crown"></i>
+                            <span>Plans & Tokens</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-outline btn-block">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="studio-header">
+                <h1>Your <span>Profile</span></h1>
+                <div class="user-menu">
+                    <button class="user-button">
+                        <div class="user-avatar">{{ user.username[0].upper() }}</div>
+                        <span class="user-name">{{ user.username }}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="/studio" class="dropdown-item">
+                            <i class="fas fa-palette"></i>
+                            <span>Studio</span>
+                        </a>
+                        <a href="/plans" class="dropdown-item">
+                            <i class="fas fa-crown"></i>
+                            <span>Plans & Tokens</span>
+                        </a>
+                        <button id="mobile-logout" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="profile-container">
+                <!-- Account Summary -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>Account Summary</h2>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-info">
+                            <div class="info-row">
+                                <div class="info-item">
+                                    <span class="info-label">Username</span>
+                                    <span class="info-value">{{ profile.username }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Email</span>
+                                    <span class="info-value">{{ profile.email }}</span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-item">
+                                    <span class="info-label">Current Plan</span>
+                                    <span class="info-value plan-badge {{ profile.plan.plan_id }}">{{ profile.plan.name }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Token Balance</span>
+                                    <span class="info-value token-balance">{{ profile.tokens.balance }} tokens</span>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-item">
+                                    <span class="info-label">Member Since</span>
+                                    <span class="info-value">{{ profile.created_at }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Images Generated</span>
+                                    <span class="info-value">{{ profile.stats.total_images }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="/plans" class="btn btn-outline">
+                                <i class="fas fa-shopping-cart"></i> Buy Tokens
+                            </a>
+                            <a href="/plans" class="btn btn-primary">
+                                <i class="fas fa-crown"></i> Upgrade Plan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Settings -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>Account Settings</h2>
+                    </div>
+                    <div class="settings-container">
+                        <!-- Change Username -->
+                        <div class="settings-card">
+                            <div class="settings-header">
+                                <h3>Change Username</h3>
+                                <p>Update your current username</p>
+                            </div>
+                            <form id="username-form" class="settings-form">
+                                <div class="form-group">
+                                    <label for="new-username">New Username</label>
+                                    <input type="text" id="new-username" name="new-username" required>
+                                </div>
+                                <div class="settings-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-text">Update Username</span>
+                                        <span class="btn-loader">
+                                            <i class="fas fa-spinner fa-spin"></i> Processing...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Change Email -->
+                        <div class="settings-card">
+                            <div class="settings-header">
+                                <h3>Change Email</h3>
+                                <p>Update your account email address</p>
+                            </div>
+                            <form id="email-form" class="settings-form">
+                                <div class="form-group">
+                                    <label for="new-email">New Email Address</label>
+                                    <input type="email" id="new-email" name="new-email" required>
+                                    <small>Only Gmail and Outlook email accounts are accepted</small>
+                                </div>
+                                <div class="settings-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-text">Update Email</span>
+                                        <span class="btn-loader">
+                                            <i class="fas fa-spinner fa-spin"></i> Processing...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Change Password -->
+                        <div class="settings-card">
+                            <div class="settings-header">
+                                <h3>Change Password</h3>
+                                <p>Update your account password</p>
+                            </div>
+                            <form id="password-form" class="settings-form">
+                                <div class="form-group">
+                                    <label for="current-password">Current Password</label>
+                                    <div class="input-icon">
+                                        <input type="password" id="current-password" name="current-password" required>
+                                        <i class="fas fa-eye toggle-password"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-password">New Password</label>
+                                    <div class="input-icon">
+                                        <input type="password" id="new-password" name="new-password" required>
+                                        <i class="fas fa-eye toggle-password"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-new-password">Confirm New Password</label>
+                                    <div class="input-icon">
+                                        <input type="password" id="confirm-new-password" name="confirm-new-password" required>
+                                        <i class="fas fa-eye toggle-password"></i>
+                                    </div>
+                                </div>
+                                <div class="settings-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-text">Update Password</span>
+                                        <span class="btn-loader">
+                                            <i class="fas fa-spinner fa-spin"></i> Processing...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Verification Code Modal -->
+                <div id="verification-modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Verification Required</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>We've sent a verification code to your email. Please enter it below to complete your request.</p>
+                            <form id="verification-form" class="settings-form">
+                                <input type="hidden" id="verification-type" name="verification-type" value="">
+                                <div class="form-group">
+                                    <label for="verification-code">Verification Code</label>
+                                    <input type="text" id="verification-code" name="verification-code" placeholder="Enter 6-digit code" maxlength="6" required>
+                                </div>
+                                <div class="settings-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="btn-text">Verify</span>
+                                        <span class="btn-loader">
+                                            <i class="fas fa-spinner fa-spin"></i> Verifying...
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Notifications -->
+    <div class="notification-container" id="notification-container"></div>
+    
+    <script src="/static/js/studio.js"></script>
+    <script src="/static/js/profile.js"></script>
+</body>
+</html>

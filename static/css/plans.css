@@ -1,0 +1,521 @@
+/* 
+ * DREAMMAKER - PLANS PAGE STYLES
+ */
+
+/* Welcome Banner */
+.welcome-banner {
+    background: linear-gradient(135deg, var(--primary-light), rgba(139, 92, 246, 0.1));
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-6);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    box-shadow: var(--shadow-md);
+}
+
+.welcome-content {
+    padding: var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+.welcome-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--primary), #a78bfa);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.welcome-text h2 {
+    font-size: 1.6rem;
+    color: var(--primary);
+    margin-bottom: var(--space-2);
+}
+
+.welcome-text p {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+/* Token Balance Section */
+.token-balance-section {
+    margin-bottom: var(--space-7);
+}
+
+.token-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+}
+
+.token-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.token-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.token-icon i {
+    font-size: 1.8rem;
+    color: white;
+}
+
+.token-details h2 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.token-details p {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.token-actions {
+    display: flex;
+    gap: var(--space-3);
+}
+
+/* Plans Section */
+.plans-section {
+    margin-bottom: var(--space-7);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.section-header h2 {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.section-header p {
+    color: var(--text-secondary);
+}
+
+.plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-5);
+}
+
+.plan-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    position: relative;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.plan-card.active {
+    border: 2px solid var(--primary);
+}
+
+.plan-card.active::before {
+    content: 'Current Plan';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    z-index: 1;
+}
+
+.plan-header {
+    background: linear-gradient(135deg, #7c3aed10, #8b5cf610);
+    padding: var(--space-5);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.plan-card.active .plan-header {
+    background: linear-gradient(135deg, #7c3aed30, #8b5cf630);
+}
+
+.plan-header h3 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.plan-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.plan-features {
+    padding: var(--space-5) var(--space-4);
+}
+
+.plan-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plan-features li {
+    padding: var(--space-2) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+}
+
+.plan-features li i {
+    color: var(--success);
+    font-size: 0.9rem;
+}
+
+.plan-action {
+    padding: 0 var(--space-4) var(--space-5);
+    text-align: center;
+}
+
+/* Token Packages Section */
+.token-packages-section {
+    margin-bottom: var(--space-7);
+    scroll-margin-top: var(--space-6);
+}
+
+.packages-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-5);
+}
+
+.package-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+}
+
+.package-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.package-header {
+    background: linear-gradient(135deg, #f59e0b10, #fbbf2410);
+    padding: var(--space-4);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.package-header h3 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.package-price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #f59e0b;
+}
+
+.package-content {
+    padding: var(--space-4);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.token-amount {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+}
+
+.token-amount i {
+    color: #f59e0b;
+    font-size: 1.3rem;
+}
+
+.package-description {
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.price-per-token {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    margin-top: auto;
+}
+
+.package-action {
+    padding: 0 var(--space-4) var(--space-4);
+    text-align: center;
+}
+
+/* Payment History Section */
+.payment-history-section {
+    margin-bottom: var(--space-7);
+}
+
+.history-container {
+    overflow-x: auto;
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payment-table th,
+.payment-table td {
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.payment-table th {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.payment-table tr:last-child td {
+    border-bottom: none;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-badge.completed {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.status-badge.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.status-badge.failed {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+}
+
+.empty-history {
+    text-align: center;
+    padding: var(--space-6);
+    color: var(--text-tertiary);
+}
+
+/* Payment Success Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 7, 12, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 400px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: var(--space-5);
+    text-align: center;
+}
+
+.success-icon {
+    font-size: 3rem;
+    color: var(--success);
+    margin-bottom: var(--space-4);
+}
+
+.modal-body h4 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+}
+
+.modal-body p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+}
+
+.purchase-details {
+    background-color: var(--bg-darker);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-4);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-2);
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-label {
+    color: var(--text-tertiary);
+}
+
+.detail-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.modal-actions {
+    margin-top: var(--space-4);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .token-card {
+        flex-direction: column;
+        gap: var(--space-4);
+        align-items: flex-start;
+    }
+    
+    .token-actions {
+        width: 100%;
+    }
+    
+    .section-header h2 {
+        font-size: 1.5rem;
+    }
+    
+    .plan-price, .token-amount {
+        font-size: 1.3rem;
+    }
+    
+    .welcome-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .welcome-icon {
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .token-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .token-icon i {
+        font-size: 1.5rem;
+    }
+    
+    .token-details h2 {
+        font-size: 1.3rem;
+    }
+    
+    .payment-table th,
+    .payment-table td {
+        padding: var(--space-2);
+    }
+}

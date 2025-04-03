@@ -26,9 +26,21 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li class="active">
-                        <a href="#">
+                        <a href="/studio">
                             <i class="fas fa-palette"></i>
                             <span>Studio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/profile">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/plans">
+                            <i class="fas fa-crown"></i>
+                            <span>Plans & Tokens</span>
                         </a>
                     </li>
                     <li>
@@ -59,6 +71,14 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="user-dropdown">
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <a href="/plans" class="dropdown-item">
+                            <i class="fas fa-crown"></i>
+                            <span>Plans & Tokens</span>
+                        </a>
                         <button id="mobile-logout" class="dropdown-item">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Logout</span>
@@ -67,11 +87,59 @@
                 </div>
             </header>
             
+            <!-- User Stats -->
+            <div class="user-stats-section">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon token-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-details">
+                            <p class="stat-value">{{ token_balance }} Tokens</p>
+                            <p class="stat-label">Balance</p>
+                        </div>
+                        <a href="/plans" class="stat-action btn btn-sm btn-outline">
+                            <i class="fas fa-plus"></i> Buy More
+                        </a>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon plan-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="stat-details">
+                            <p class="stat-value">{{ plan.name }} Plan</p>
+                            <p class="stat-label">{{ plan.generation_wait }}s generation wait</p>
+                        </div>
+                        <a href="/plans" class="stat-action btn btn-sm btn-outline">
+                            <i class="fas fa-arrow-up"></i> Upgrade
+                        </a>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon limit-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-details">
+                            <p class="stat-value">{{ remaining_images }} Images</p>
+                            <p class="stat-label">Remaining today</p>
+                        </div>
+                        <div class="stat-info">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Resets daily</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <section class="generator-section">
                 <div class="generator-card">
                     <div class="card-header">
                         <h2>Image Generator</h2>
                         <p>Describe what you'd like to create and our AI will bring it to life</p>
+                        <div class="image-cost">
+                            <i class="fas fa-coins"></i> Each image costs {{ token_cost }} tokens
+                        </div>
                     </div>
                     
                     <form id="image-generator-form">
@@ -99,13 +167,43 @@
                         </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary btn-block">
+                            <button type="submit" class="btn btn-primary btn-block" {% if has_active_task or remaining_images == 0 or token_balance < token_cost %}disabled{% endif %}>
                                 <span class="btn-text"><i class="fas fa-wand-magic-sparkles"></i> Generate Image</span>
                                 <span class="btn-loader">
-                                    <i class="fas fa-spinner fa-spin"></i> Generating...
+                                    <i class="fas fa-spinner fa-spin"></i> Queueing...
                                 </span>
                             </button>
                         </div>
+                        
+                        {% if has_active_task %}
+                        <div class="active-task-info" data-task-id="{{ active_task_id }}">
+                            <p>
+                                <i class="fas fa-hourglass-half"></i>
+                                You have an image in the queue. Please wait for it to complete.
+                            </p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if remaining_images == 0 %}
+                        <div class="limit-reached-info">
+                            <p>
+                                <i class="fas fa-exclamation-circle"></i>
+                                You've reached your daily limit. Come back tomorrow for more!
+                            </p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if token_balance < token_cost %}
+                        <div class="tokens-insufficient-info">
+                            <p>
+                                <i class="fas fa-exclamation-circle"></i>
+                                Insufficient tokens. You need {{ token_cost }} tokens per image.
+                            </p>
+                            <a href="/plans" class="btn btn-sm btn-outline">
+                                <i class="fas fa-plus"></i> Buy More Tokens
+                            </a>
+                        </div>
+                        {% endif %}
                     </form>
                 </div>
                 
@@ -127,7 +225,14 @@
                             <img id="result-image" src="" alt="Generated image">
                             <div class="image-loader">
                                 <div class="spinner"></div>
-                                <p>Creating your masterpiece...</p>
+                                <p id="loader-message">Creating your masterpiece...</p>
+                                <div class="queue-status" id="queue-status" style="display: none;">
+                                    <p>Position in queue: <span id="queue-position">-</span></p>
+                                    <p>Estimated time: <span id="estimated-time">-</span> seconds</p>
+                                    <div class="progress-bar">
+                                        <div class="progress-value" id="queue-progress"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -139,6 +244,10 @@
                             <div class="detail-item">
                                 <span class="detail-label">Dimensions:</span>
                                 <p id="result-dimensions" class="detail-value"></p>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Cost:</span>
+                                <p class="detail-value"><i class="fas fa-coins"></i> {{ token_cost }} tokens</p>
                             </div>
                         </div>
                     </div>
@@ -165,7 +274,10 @@
                                 </div>
                                 <div class="gallery-details">
                                     <p class="gallery-prompt">{{ image.prompt }}</p>
-                                    <p class="gallery-date">{{ image.created_at }}</p>
+                                    <div class="gallery-info">
+                                        <p class="gallery-date">{{ image.created_at }}</p>
+                                        <p class="gallery-cost"><i class="fas fa-coins"></i> {{ image.tokens_used }}</p>
+                                    </div>
                                 </div>
                             </div>
                         {% endfor %}

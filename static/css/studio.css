@@ -1,6 +1,5 @@
 /* 
  * DREAMMAKER - STUDIO PAGE STYLES
- * Styles for the main image generation studio
  */
 
 /* Layout */
@@ -241,6 +240,82 @@
     color: var(--text-primary);
 }
 
+/* User Stats Section */
+.user-stats-section {
+    margin-bottom: var(--space-6);
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-4);
+}
+
+.stat-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    align-items: center;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--space-4);
+    font-size: 1.2rem;
+    color: white;
+}
+
+.token-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.plan-icon {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+}
+
+.limit-icon {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.stat-action {
+    margin-left: var(--space-2);
+}
+
+.stat-info {
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+}
+
 /* Generator Section */
 .generator-section {
     display: grid;
@@ -285,6 +360,19 @@
 .result-actions {
     display: flex;
     gap: var(--space-3);
+}
+
+.image-cost {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-radius: var(--radius-full);
+    font-size: 0.9rem;
+    align-self: flex-start;
 }
 
 #image-generator-form {
@@ -406,6 +494,49 @@
     word-break: break-word;
 }
 
+/* Status notices */
+.active-task-info, .limit-reached-info, .tokens-insufficient-info {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.active-task-info {
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid var(--warning);
+    color: var(--warning);
+}
+
+.limit-reached-info, .tokens-insufficient-info {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    color: var(--error);
+}
+
+.tokens-insufficient-info {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.tokens-insufficient-info p {
+    margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.active-task-info p, .limit-reached-info p {
+    margin-bottom: 0;
+}
+
+.active-task-info i, .limit-reached-info i, .tokens-insufficient-info i {
+    font-size: 1.2rem;
+}
+
 /* Gallery Section */
 .gallery-section {
     margin-top: var(--space-8);
@@ -496,10 +627,23 @@
     overflow: hidden;
 }
 
-.gallery-date {
+.gallery-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 0.85rem;
     color: var(--text-tertiary);
+}
+
+.gallery-date, .gallery-cost {
     margin-bottom: 0;
+}
+
+.gallery-cost {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: #f59e0b;
 }
 
 .empty-gallery {
@@ -766,6 +910,10 @@
     .main-content {
         padding: var(--space-5) var(--space-5);
     }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 900px) {
@@ -868,5 +1016,20 @@
     
     .modal-actions {
         flex-direction: column;
+    }
+    
+    .stat-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-3);
+    }
+    
+    .stat-icon {
+        margin-right: 0;
+    }
+    
+    .stat-action {
+        margin-left: 0;
+        align-self: stretch;
     }
 }

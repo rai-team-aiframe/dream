@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plans & Tokens - DreamMaker</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="/static/css/studio.css">
+    <link rel="stylesheet" href="/static/css/plans.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="studio-container">
+        <!-- Sidebar -->
+        <aside class="sidebar {% if is_new_user %}collapsed{% endif %}">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-paint-brush"></i>
+                    <h1>DreamMaker</h1>
+                </div>
+                <button class="toggle-sidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="/studio">
+                            <i class="fas fa-palette"></i>
+                            <span>Studio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/profile">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/plans">
+                            <i class="fas fa-crown"></i>
+                            <span>Plans & Tokens</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn btn-outline btn-block">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="studio-header">
+                {% if is_new_user %}
+                <h1>Welcome to <span>DreamMaker</span>! Choose your plan to get started</h1>
+                {% else %}
+                <h1>Plans & <span>Tokens</span></h1>
+                {% endif %}
+                
+                <div class="user-menu">
+                    <button class="user-button">
+                        <div class="user-avatar">{{ user.username[0].upper() }}</div>
+                        <span class="user-name">{{ user.username }}</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="/studio" class="dropdown-item">
+                            <i class="fas fa-palette"></i>
+                            <span>Studio</span>
+                        </a>
+                        <a href="/profile" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                        <button id="mobile-logout" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            
+            {% if is_new_user %}
+            <!-- Welcome Banner for New Users -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <div class="welcome-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <div class="welcome-text">
+                        <h2>Welcome to DreamMaker!</h2>
+                        <p>Your account has been created successfully. Please choose a plan below to get started with image generation.</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if not is_new_user %}
+            <!-- Token Balance -->
+            <div class="token-balance-section">
+                <div class="token-card">
+                    <div class="token-info">
+                        <div class="token-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="token-details">
+                            <h2>{{ token_balance }} Tokens</h2>
+                            <p>Each image costs {{ token_packages.small.tokens / 50 }} tokens</p>
+                        </div>
+                    </div>
+                    <div class="token-actions">
+                        <button class="btn btn-primary smooth-scroll" data-target="token-packages">
+                            <i class="fas fa-plus"></i> Buy More Tokens
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Subscription Plans -->
+            <section class="plans-section">
+                <div class="section-header">
+                    {% if is_new_user %}
+                    <h2>Choose Your Plan</h2>
+                    <p>Select the plan that best fits your needs</p>
+                    {% else %}
+                    <h2>Subscription Plans</h2>
+                    <p>Choose the plan that best fits your needs</p>
+                    {% endif %}
+                </div>
+                
+                <div class="plans-container">
+                    {% for plan_id, plan in plans.items() %}
+                    <div class="plan-card {% if plan_id == current_plan and not is_new_user %}active{% endif %}">
+                        <div class="plan-header">
+                            <h3>{{ plan.name }}</h3>
+                            <span class="plan-price">
+                                {% if plan.price == 0 %}
+                                Free
+                                {% else %}
+                                {{ "{:,}".format(plan.price) }} Toman
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span>{{ plan.initial_tokens if plan_id == 'free' else plan.tokens }} Tokens</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span>{{ plan.generation_wait }}s Generation Wait</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span>{{ plan.queue_wait }}s Queue Wait</span>
+                                </li>
+                                {% if plan_id == 'premium' or plan_id == 'pro' %}
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span>Priority Queue</span>
+                                </li>
+                                {% endif %}
+                                {% if plan_id == 'pro' %}
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    <span>Highest Queue Priority</span>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="plan-action">
+                            {% if is_new_user %}
+                                <button class="btn btn-primary select-plan-btn" data-plan="{{ plan_id }}">
+                                    <span class="btn-text">Select Plan</span>
+                                    <span class="btn-loader">
+                                        <i class="fas fa-spinner fa-spin"></i> Processing...
+                                    </span>
+                                </button>
+                            {% elif plan_id == current_plan %}
+                                <button class="btn btn-outline" disabled>Current Plan</button>
+                            {% elif plan_id == 'free' %}
+                                <button class="btn btn-outline" disabled>Free Plan</button>
+                            {% else %}
+                                <button class="btn btn-primary upgrade-plan-btn" data-plan="{{ plan_id }}">
+                                    <span class="btn-text">Upgrade Now</span>
+                                    <span class="btn-loader">
+                                        <i class="fas fa-spinner fa-spin"></i> Processing...
+                                    </span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            
+            {% if not is_new_user %}
+            <!-- Token Packages -->
+            <section id="token-packages" class="token-packages-section">
+                <div class="section-header">
+                    <h2>Token Packages</h2>
+                    <p>Purchase tokens to generate more images</p>
+                </div>
+                
+                <div class="packages-container">
+                    {% for package_id, package in token_packages.items() %}
+                    <div class="package-card">
+                        <div class="package-header">
+                            <h3>{{ package.name }}</h3>
+                            <span class="package-price">{{ "{:,}".format(package.price) }} Toman</span>
+                        </div>
+                        <div class="package-content">
+                            <div class="token-amount">
+                                <i class="fas fa-coins"></i>
+                                <span>{{ package.tokens }} Tokens</span>
+                            </div>
+                            <p class="package-description">{{ package.description }}</p>
+                            <div class="price-per-token">
+                                <span>{{ "{:,.0f}".format(package.price / package.tokens) }} Toman per token</span>
+                            </div>
+                        </div>
+                        <div class="package-action">
+                            <button class="btn btn-primary purchase-package-btn" data-package="{{ package_id }}">
+                                <span class="btn-text">Buy Now</span>
+                                <span class="btn-loader">
+                                    <i class="fas fa-spinner fa-spin"></i> Processing...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            
+            <!-- Payment History -->
+            <section class="payment-history-section">
+                <div class="section-header">
+                    <h2>Payment History</h2>
+                </div>
+                
+                <div class="history-container">
+                    <table class="payment-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Tokens</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if payment_history %}
+                                {% for payment in payment_history %}
+                                <tr>
+                                    <td>{{ payment.date }}</td>
+                                    <td>
+                                        {% if payment.plan %}
+                                        Plan Upgrade: {{ payment.plan }}
+                                        {% else %}
+                                        Token Purchase
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ "{:,}".format(payment.amount) }} Toman</td>
+                                    <td>{{ payment.tokens }}</td>
+                                    <td>
+                                        <span class="status-badge {{ payment.status }}">
+                                            {{ payment.status }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5" class="empty-history">
+                                        <p>No payment history yet</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            {% endif %}
+            
+            <!-- Payment Success Modal -->
+            <div id="payment-success-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Payment Successful</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h4>Thank You for Your Purchase!</h4>
+                        <p>Your payment has been processed successfully.</p>
+                        <div class="purchase-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Amount:</span>
+                                <span class="detail-value" id="payment-amount"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Tokens:</span>
+                                <span class="detail-value" id="payment-tokens"></span>
+                            </div>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="btn btn-primary" id="close-payment-modal">
+                                Continue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Notifications -->
+    <div class="notification-container" id="notification-container"></div>
+    
+    <script src="/static/js/studio.js"></script>
+    <script src="/static/js/plans.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+/* 
+ * DREAMMAKER - PROFILE PAGE STYLES
+ */
+
+ .profile-container {
+    padding: var(--space-4) 0;
+}
+
+.profile-section {
+    margin-bottom: var(--space-7);
+}
+
+.section-header {
+    margin-bottom: var(--space-4);
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.section-header p {
+    color: var(--text-secondary);
+}
+
+/* Account Summary Card */
+.profile-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-md);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.info-row {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.info-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.info-label {
+    display: block;
+    color: var(--text-tertiary);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-1);
+}
+
+.info-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.plan-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    background-color: rgba(124, 58, 237, 0.1);
+    color: var(--primary);
+}
+
+.plan-badge.premium {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.plan-badge.pro {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.token-balance {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.token-balance::before {
+    content: '\f51e';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    color: #f59e0b;
+}
+
+.profile-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    justify-content: flex-end;
+}
+
+/* Settings Cards */
+.settings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-5);
+}
+
+.settings-card {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.settings-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.settings-header {
+    margin-bottom: var(--space-4);
+}
+
+.settings-header h3 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+}
+
+.settings-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.settings-actions {
+    margin-top: var(--space-2);
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Verification Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 7, 12, 0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-header {
+    padding: var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h3 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: var(--space-5);
+}
+
+.modal-body p {
+    margin-bottom: var(--space-4);
+    color: var(--text-secondary);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-actions {
+        flex-direction: column;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    
+    .settings-container {
+        grid-template-columns: 1fr;
+    }
+}
